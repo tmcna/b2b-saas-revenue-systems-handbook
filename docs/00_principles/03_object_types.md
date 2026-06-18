@@ -105,4 +105,4 @@ Negotiation → Commitment → Fulfillment → Settlement
 
 ---
 
-**次回：** [業務システムを語るための基礎概念](02_concepts.md)
+**次回：** [業務システムを語るための基礎概念](04_concepts.md)
