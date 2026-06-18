@@ -41,6 +41,8 @@
 ### 序章　収益系システムが分断される理由
 
 - [売上とは何か——職種によって変わる「当たり前」の定義](docs/00_introduction/01_what_is_revenue.md)
+- [収益認識——「いつ売上を計上するか」を決めるルール](docs/00_introduction/03_revenue_recognition.md)
+- [「客から受け取る金額は同じなのに、なぜ数字がずれるのか」](docs/00_introduction/04_why_numbers_diverge.md)
 - [顧客管理・請求・会計のデータが統合できない、3つの構造的な理由](docs/00_introduction/02_why_systems_fragment.md)
 
 ---
@@ -109,6 +111,7 @@
 
 ### 結語
 
+- [複雑さとの向き合い方——知識を実践に変える](docs/06_conclusion/00_how_to_cope.md)
 - [あとがきにかえて](docs/06_conclusion/01_closing.md)
 
 ---
@@ -149,7 +152,7 @@
 
 ## ライセンス
 
-© 2026 Inujima Conan. 本書の構成・編集・執筆方針は著者が担当しています。
+© 2026 Kazuhiro Kawachi. 本書の構成・編集・執筆方針は著者が担当しています。
 
 本書は [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja)（クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際）ライセンスのもとで公開しています。
 
