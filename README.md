@@ -34,6 +34,7 @@
 
 ### 第0章
 
+- [売上とは何か——職種によって変わる「当たり前」の定義](docs/00_principles/00_what_is_revenue.md)
 - [顧客管理・請求・会計のデータが統合できない、3つの構造的な理由](docs/00_principles/00_why_systems_fragment.md)
 
 ---
