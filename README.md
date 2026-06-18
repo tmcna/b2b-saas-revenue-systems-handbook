@@ -111,6 +111,7 @@
 
 ### 結語
 
+- [複雑さとの向き合い方——知識を実践に変える](docs/06_conclusion/00_how_to_cope.md)
 - [あとがきにかえて](docs/06_conclusion/01_closing.md)
 
 ---
@@ -151,7 +152,7 @@
 
 ## ライセンス
 
-© 2026 Inujima Conan. 本書の構成・編集・執筆方針は著者が担当しています。
+© 2026 Kazuhiro Kawachi. 本書の構成・編集・執筆方針は著者が担当しています。
 
 本書は [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja)（クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際）ライセンスのもとで公開しています。
 
