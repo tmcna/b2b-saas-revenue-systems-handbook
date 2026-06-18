@@ -1,0 +1,112 @@
+site_name: B2B SaaS Revenue Systems Handbook
+site_url: https://tmcna.github.io/b2b-saas-revenue-systems-handbook/
+site_description: B2B SaaS の収益系システムを正しく設計するための体系
+site_author: Inujima Conan
+
+repo_name: tmcna/b2b-saas-revenue-systems-handbook
+repo_url: https://github.com/tmcna/b2b-saas-revenue-systems-handbook
+
+docs_dir: docs
+
+extra_css:
+  - stylesheets/extra.css
+
+theme:
+  name: material
+  language: ja
+  font:
+    text: Noto Sans JP
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: white
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: ダークモードに切り替え
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: ライトモードに切り替え
+
+plugins:
+  - search:
+      lang: ja
+  - include-markdown
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - ホーム: index.md
+  - 序章 収益系システムが分断される理由:
+    - 売上とは何か——職種によって変わる「当たり前」の定義: 00_introduction/01_what_is_revenue.md
+    - 顧客管理・請求・会計のデータが統合できない、3つの構造的な理由: 00_introduction/02_why_systems_fragment.md
+  - 第1章 業務システムの構成要素:
+    - 業務エンティティの型分類——設計判断を導くための語彙: 01_principles/00_intro.md
+    - 業務システムの構成要素——フローエンティティ・マスターデータ・計算サービス・台帳: 01_principles/01_object_types.md
+    - 業務システムを語るための基礎概念: 01_principles/02_concepts.md
+  - 第2章 各ドメインの責務と設計:
+    - 各ドメインの責務と設計——なぜこの境界で分かれるのか: 02_domains/00_intro.md
+    - 顧客ドメイン——すべての業務エンティティの参照点: 02_domains/01_customer.md
+    - 商品ドメイン——なぜ「商品」と「価格」は別管理するのか: 02_domains/02_product.md
+    - 価格表ドメイン——取引から切り離した価格ルール: 02_domains/03_price_book.md
+    - 見積ドメイン——まだ合意していない価格が「書類」になるまで: 02_domains/04_quote.md
+    - 契約ドメイン——署名した瞬間に変わる「不可逆性の境界」: 02_domains/05_contract.md
+    - 注文ドメイン——「合意」から「実行」へ、契約と注文が分かれる理由: 02_domains/06_order.md
+    - サブスクリプションドメイン——「今まさに提供中」の状態を管理する: 02_domains/07_subscription.md
+    - 請求書ドメイン——発行したら変更できない、金銭請求の法的記録: 02_domains/08_invoice.md
+    - 入金ドメイン——「お金が届いた」と「売上を計上する」は別の話: 02_domains/09_payment.md
+    - 総勘定元帳ドメイン——財務会計と管理会計が別のデータモデルになる理由: 02_domains/10_general_ledger.md
+    - 税計算ドメイン——なぜ税は Billing の外側に置かれるのか: 02_domains/11_tax.md
+    - コミッションドメイン——商談クローズから支払いまでをまたぐ複雑なドメイン: 02_domains/12_commission.md
+  - 第3章 業務フローの全体像:
+    - 業務フローの全体像——ドメインが動くとき何が起きるか: 03_business_processes/00_intro.md
+    - SLGのLead-to-Cash——見込み客から入金完了までの全体像: 03_business_processes/01_slg_processes.md
+    - PLGのSignup-to-Expansion——プロダクトが営業する世界: 03_business_processes/02_signup_to_expansion.md
+    - 更新と解約——SaaS の収益はクローズ後に決まる: 03_business_processes/03_renewal_churn.md
+  - 第4章 ビジネスモデル別の構成パターン:
+    - ビジネスモデル別の構成パターン——原理を実装に変える: 04_patterns/00_intro.md
+    - スタートアップ初期のSLG——シンプルな構成から始める理由: 04_patterns/01_early_stage_slg.md
+    - スタートアップSLG——CRMとBillingをつなぐ、最初の自動連携: 04_patterns/02_startup_slg.md
+    - エンタープライズSLG——収益認識の自動化が必要になるとき: 04_patterns/03_enterprise_slg.md
+    - PLGセルフサーブ——データの重力中心がCRMではなくプロダクトにある: 04_patterns/04_plg_self_serve.md
+    - 従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル: 04_patterns/05_business_models.md
+    - マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ: 04_patterns/06_multi_entity.md
+  - 第5章 収益分析のデータモデル設計:
+    - 収益分析のデータモデル設計——何をDWHに乗せるべきか: 05_dwh/00_intro.md
+    - 請求明細ファクトテーブル——SaaS収益分析の基盤: 05_dwh/01_fact_invoice_line.md
+    - 入金ファクトテーブル——キャッシュフローと延滞を分析する: 05_dwh/02_fact_payment.md
+    - 見積明細ファクトテーブル——受注率と割引傾向を分析する: 05_dwh/03_fact_quote_line.md
+    - 顧客ディメンションテーブル——緩やかに変化する属性をどう管理するか: 05_dwh/04_dim_customer.md
+    - 商品ディメンションテーブル——価格を持たせてはいけない理由: 05_dwh/05_dim_product.md
+    - 売掛金エイジングファクトテーブル——未収金をどこまで放置していいのか: 05_dwh/06_fact_ar_aging.md
+    - MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える: 05_dwh/07_fact_mrr.md
+    - コホート分析ファクトテーブル——顧客の継続率を時系列で捉える: 05_dwh/08_fact_cohort.md
+    - NRR ファクトテーブル——収益の自己増殖力を測る: 05_dwh/09_fact_nrr.md
+  - 結語:
+    - あとがきにかえて: 06_conclusion/01_closing.md
+  - 付録:
+    - ドメイン・構成要素対応表: 07_appendix/01_domain_map.md
+    - 用語集（英日対応）: 07_appendix/02_glossary.md
+    - 主要SaaSプロダクト対応表: 07_appendix/03_saas_tools.md
+    - 職種別「売上」定義マップ: 07_appendix/04_revenue_by_role.md

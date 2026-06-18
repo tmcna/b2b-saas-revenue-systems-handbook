@@ -1,0 +1,14 @@
+.md-typeset {
+  font-weight: 500;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-weight: 700;
+}
+
+.md-typeset table {
+  font-size: 0.9rem;
+}
