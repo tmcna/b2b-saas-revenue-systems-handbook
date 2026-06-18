@@ -83,23 +83,23 @@
 - [スタートアップSLG——CRMとBillingをつなぐ、最初の自動連携](docs/04_patterns/02_startup_slg.md)
 - [エンタープライズSLG——収益認識の自動化が必要になるとき](docs/04_patterns/03_enterprise_slg.md)
 - [PLGセルフサーブ——データの重力中心がCRMではなくプロダクトにある](docs/04_patterns/04_plg_self_serve.md)
-- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](docs/05_supplement/01_business_models.md)
-- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](docs/05_supplement/02_multi_entity.md)
+- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](docs/04_patterns/05_business_models.md)
+- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](docs/04_patterns/06_multi_entity.md)
 
 ---
 
 ### 第5章　収益分析のデータモデル設計
 
-- [何をDWHに乗せるべきか——判断基準と本章の設計方針](docs/06_dwh/00_intro.md)
-- [請求明細ファクトテーブル——SaaS収益分析の基盤](docs/06_dwh/01_fact_invoice_line.md)
-- [入金ファクトテーブル——キャッシュフローと延滞を分析する](docs/06_dwh/02_fact_payment.md)
-- [見積明細ファクトテーブル——受注率と割引傾向を分析する](docs/06_dwh/03_fact_quote_line.md)
-- [顧客ディメンションテーブル——緩やかに変化する属性をどう管理するか](docs/06_dwh/04_dim_customer.md)
-- [商品ディメンションテーブル——価格を持たせてはいけない理由](docs/06_dwh/05_dim_product.md)
-- [売掛金エイジングファクトテーブル——未収金をどこまで放置していいのか](docs/06_dwh/06_fact_ar_aging.md)
-- [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/06_dwh/07_fact_mrr.md)
-- [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/06_dwh/08_fact_cohort.md)
-- [NRR ファクトテーブル——収益の自己増殖力を測る](docs/06_dwh/09_fact_nrr.md)
+- [何をDWHに乗せるべきか——判断基準と本章の設計方針](docs/05_dwh/00_intro.md)
+- [請求明細ファクトテーブル——SaaS収益分析の基盤](docs/05_dwh/01_fact_invoice_line.md)
+- [入金ファクトテーブル——キャッシュフローと延滞を分析する](docs/05_dwh/02_fact_payment.md)
+- [見積明細ファクトテーブル——受注率と割引傾向を分析する](docs/05_dwh/03_fact_quote_line.md)
+- [顧客ディメンションテーブル——緩やかに変化する属性をどう管理するか](docs/05_dwh/04_dim_customer.md)
+- [商品ディメンションテーブル——価格を持たせてはいけない理由](docs/05_dwh/05_dim_product.md)
+- [売掛金エイジングファクトテーブル——未収金をどこまで放置していいのか](docs/05_dwh/06_fact_ar_aging.md)
+- [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/05_dwh/07_fact_mrr.md)
+- [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/05_dwh/08_fact_cohort.md)
+- [NRR ファクトテーブル——収益の自己増殖力を測る](docs/05_dwh/09_fact_nrr.md)
 
 ---
 

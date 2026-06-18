@@ -140,4 +140,4 @@ USD MRR と JPY MRR を単純に足すことはできません。管理会計で
 
 ---
 
-**次回：** [請求明細ファクトテーブル——SaaS収益分析の基盤](../06_dwh/01_fact_invoice_line.md)
+**次回：** [請求明細ファクトテーブル——SaaS収益分析の基盤](../05_dwh/01_fact_invoice_line.md)
