@@ -12,5 +12,5 @@
 - [スタートアップSLG——CRMとBillingをつなぐ、最初の自動連携](02_startup_slg.md)
 - [エンタープライズSLG——収益認識の自動化が必要になるとき](03_enterprise_slg.md)
 - [PLGセルフサーブ——データの重力中心がCRMではなくプロダクトにある](04_plg_self_serve.md)
-- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](../04_supplement/01_business_models.md)
-- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](../04_supplement/02_multi_entity.md)
+- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](../05_supplement/01_business_models.md)
+- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](../05_supplement/02_multi_entity.md)

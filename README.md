@@ -36,70 +36,70 @@
 
 ### 第0章　収益系システムが分断される理由
 
-- [売上とは何か——職種によって変わる「当たり前」の定義](docs/00_principles/01_what_is_revenue.md)
-- [顧客管理・請求・会計のデータが統合できない、3つの構造的な理由](docs/00_principles/02_why_systems_fragment.md)
+- [売上とは何か——職種によって変わる「当たり前」の定義](docs/00_introduction/01_what_is_revenue.md)
+- [顧客管理・請求・会計のデータが統合できない、3つの構造的な理由](docs/00_introduction/02_why_systems_fragment.md)
 
 ---
 
 ### 第1章　業務オブジェクトの型分類
 
-- [設計判断を導くための語彙](docs/00_principles/00_intro.md)
-- [見積書と請求書はなぜ別のシステムで管理するのか——業務オブジェクトの4つの型](docs/00_principles/03_object_types.md)
-- [業務システムを語るための基礎概念](docs/00_principles/04_concepts.md)
+- [設計判断を導くための語彙](docs/01_principles/00_intro.md)
+- [見積書と請求書はなぜ別のシステムで管理するのか——業務オブジェクトの4つの型](docs/01_principles/01_object_types.md)
+- [業務システムを語るための基礎概念](docs/01_principles/02_concepts.md)
 
 ---
 
 ### 第2章　各ドメインの責務と設計
 
-- [なぜこの境界で分かれるのか](docs/01_domains/00_intro.md)
-- [顧客——すべての業務オブジェクトの参照点](docs/01_domains/01_customer.md)
-- [商品——なぜ「商品」と「価格」は別管理するのか](docs/01_domains/02_product.md)
-- [価格表——取引から切り離した価格ルール](docs/01_domains/03_price_book.md)
-- [見積——まだ合意していない価格が「書類」になるまで](docs/01_domains/04_quote.md)
-- [契約——署名した瞬間に変わる「不可逆性の境界」](docs/01_domains/05_contract.md)
-- [注文——「合意」から「実行」へ、契約と注文が分かれる理由](docs/01_domains/06_order.md)
-- [サブスクリプション——「今まさに提供中」の状態を管理する](docs/01_domains/07_subscription.md)
-- [請求書——発行したら変更できない、金銭請求の法的記録](docs/01_domains/08_invoice.md)
-- [入金——「お金が届いた」と「売上を計上する」は別の話](docs/01_domains/09_payment.md)
-- [総勘定元帳——財務会計と管理会計が別のデータモデルになる理由](docs/01_domains/10_general_ledger.md)
-- [税計算——なぜ税は Billing の外側に置かれるのか](docs/01_domains/11_tax.md)
-- [コミッション——商談クローズから支払いまでをまたぐ複雑なドメイン](docs/01_domains/12_commission.md)
+- [なぜこの境界で分かれるのか](docs/02_domains/00_intro.md)
+- [顧客——すべての業務オブジェクトの参照点](docs/02_domains/01_customer.md)
+- [商品——なぜ「商品」と「価格」は別管理するのか](docs/02_domains/02_product.md)
+- [価格表——取引から切り離した価格ルール](docs/02_domains/03_price_book.md)
+- [見積——まだ合意していない価格が「書類」になるまで](docs/02_domains/04_quote.md)
+- [契約——署名した瞬間に変わる「不可逆性の境界」](docs/02_domains/05_contract.md)
+- [注文——「合意」から「実行」へ、契約と注文が分かれる理由](docs/02_domains/06_order.md)
+- [サブスクリプション——「今まさに提供中」の状態を管理する](docs/02_domains/07_subscription.md)
+- [請求書——発行したら変更できない、金銭請求の法的記録](docs/02_domains/08_invoice.md)
+- [入金——「お金が届いた」と「売上を計上する」は別の話](docs/02_domains/09_payment.md)
+- [総勘定元帳——財務会計と管理会計が別のデータモデルになる理由](docs/02_domains/10_general_ledger.md)
+- [税計算——なぜ税は Billing の外側に置かれるのか](docs/02_domains/11_tax.md)
+- [コミッション——商談クローズから支払いまでをまたぐ複雑なドメイン](docs/02_domains/12_commission.md)
 
 ---
 
 ### 第3章　業務フローの全体像
 
-- [ドメインが動くとき何が起きるか](docs/02_business_processes/00_intro.md)
-- [SLGのLead-to-Cash——見込み客から入金完了までの全体像](docs/02_business_processes/01_slg_processes.md)
-- [PLGのSignup-to-Expansion——プロダクトが営業する世界](docs/02_business_processes/02_signup_to_expansion.md)
-- [更新と解約——SaaS の収益はクローズ後に決まる](docs/02_business_processes/03_renewal_churn.md)
+- [ドメインが動くとき何が起きるか](docs/03_business_processes/00_intro.md)
+- [SLGのLead-to-Cash——見込み客から入金完了までの全体像](docs/03_business_processes/01_slg_processes.md)
+- [PLGのSignup-to-Expansion——プロダクトが営業する世界](docs/03_business_processes/02_signup_to_expansion.md)
+- [更新と解約——SaaS の収益はクローズ後に決まる](docs/03_business_processes/03_renewal_churn.md)
 
 ---
 
 ### 第4章　ビジネスモデル別の構成パターン
 
-- [原理を実装に変える](docs/03_patterns/00_intro.md)
-- [スタートアップ初期のSLG——シンプルな構成から始める理由](docs/03_patterns/01_early_stage_slg.md)
-- [スタートアップSLG——CRMとBillingをつなぐ、最初の自動連携](docs/03_patterns/02_startup_slg.md)
-- [エンタープライズSLG——収益認識の自動化が必要になるとき](docs/03_patterns/03_enterprise_slg.md)
-- [PLGセルフサーブ——データの重力中心がCRMではなくプロダクトにある](docs/03_patterns/04_plg_self_serve.md)
-- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](docs/04_supplement/01_business_models.md)
-- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](docs/04_supplement/02_multi_entity.md)
+- [原理を実装に変える](docs/04_patterns/00_intro.md)
+- [スタートアップ初期のSLG——シンプルな構成から始める理由](docs/04_patterns/01_early_stage_slg.md)
+- [スタートアップSLG——CRMとBillingをつなぐ、最初の自動連携](docs/04_patterns/02_startup_slg.md)
+- [エンタープライズSLG——収益認識の自動化が必要になるとき](docs/04_patterns/03_enterprise_slg.md)
+- [PLGセルフサーブ——データの重力中心がCRMではなくプロダクトにある](docs/04_patterns/04_plg_self_serve.md)
+- [従量課金とプロフェッショナルサービス——固定サブスクリプション以外のビジネスモデル](docs/05_supplement/01_business_models.md)
+- [マルチエンティティ・多通貨——複数法人と複数通貨が生み出す構造的な複雑さ](docs/05_supplement/02_multi_entity.md)
 
 ---
 
 ### 第5章　収益分析のデータモデル設計
 
-- [何をDWHに乗せるべきか——判断基準と本章の設計方針](docs/05_dwh/00_intro.md)
-- [請求明細ファクトテーブル——SaaS収益分析の基盤](docs/05_dwh/01_fact_invoice_line.md)
-- [入金ファクトテーブル——キャッシュフローと延滞を分析する](docs/05_dwh/02_fact_payment.md)
-- [見積明細ファクトテーブル——受注率と割引傾向を分析する](docs/05_dwh/03_fact_quote_line.md)
-- [顧客ディメンションテーブル——緩やかに変化する属性をどう管理するか](docs/05_dwh/04_dim_customer.md)
-- [商品ディメンションテーブル——価格を持たせてはいけない理由](docs/05_dwh/05_dim_product.md)
-- [売掛金エイジングファクトテーブル——未収金をどこまで放置していいのか](docs/05_dwh/06_fact_ar_aging.md)
-- [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/05_dwh/07_fact_mrr.md)
-- [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/05_dwh/08_fact_cohort.md)
-- [NRR ファクトテーブル——収益の自己増殖力を測る](docs/05_dwh/09_fact_nrr.md)
+- [何をDWHに乗せるべきか——判断基準と本章の設計方針](docs/06_dwh/00_intro.md)
+- [請求明細ファクトテーブル——SaaS収益分析の基盤](docs/06_dwh/01_fact_invoice_line.md)
+- [入金ファクトテーブル——キャッシュフローと延滞を分析する](docs/06_dwh/02_fact_payment.md)
+- [見積明細ファクトテーブル——受注率と割引傾向を分析する](docs/06_dwh/03_fact_quote_line.md)
+- [顧客ディメンションテーブル——緩やかに変化する属性をどう管理するか](docs/06_dwh/04_dim_customer.md)
+- [商品ディメンションテーブル——価格を持たせてはいけない理由](docs/06_dwh/05_dim_product.md)
+- [売掛金エイジングファクトテーブル——未収金をどこまで放置していいのか](docs/06_dwh/06_fact_ar_aging.md)
+- [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/06_dwh/07_fact_mrr.md)
+- [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/06_dwh/08_fact_cohort.md)
+- [NRR ファクトテーブル——収益の自己増殖力を測る](docs/06_dwh/09_fact_nrr.md)
 
 ---
 
