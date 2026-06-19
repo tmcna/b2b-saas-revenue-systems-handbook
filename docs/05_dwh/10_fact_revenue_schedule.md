@@ -109,6 +109,96 @@ fact_revenue_schedule (
 
 ---
 
+## 上流システム：どこからデータを取るか
+
+`fact_revenue_schedule` のデータソースは、他のファクトテーブルと異なり一通りではありません。会社のシステム構成によって2つのパターンがあり、どちらを選ぶかは重要な設計判断です。
+
+### パターンA：DWH 内で計算する
+
+`fact_invoice_line` にはすでに `service_start_date`（サービス開始日）と `service_end_date`（サービス終了日）があります。この2つの日付を使えば、DWH 層（dbt 等）で認識スケジュールを計算できます。ERP に収益認識モジュールがない場合や、Stripe のようなシンプルな Billing を使っている場合はこのアプローチが現実的です。
+
+```sql
+-- dbt モデルのイメージ（Snowflake 方言）
+WITH invoice_lines AS (
+  SELECT
+    invoice_line_id,
+    invoice_id,
+    customer_id,
+    subscription_id,
+    subtotal_amount                                                AS total_invoice_amount,
+    service_start_date,
+    service_end_date,
+    DATEDIFF('month', service_start_date, service_end_date) + 1   AS service_months
+  FROM {{ ref('fact_invoice_line') }}
+  WHERE invoice_status  != 'voided'
+    AND is_credit_note   = FALSE
+    AND service_start_date IS NOT NULL
+    AND service_end_date   IS NOT NULL
+),
+monthly_schedule AS (
+  SELECT
+    il.invoice_line_id,
+    il.invoice_id,
+    il.customer_id,
+    il.subscription_id,
+    il.total_invoice_amount,
+    il.service_months,
+    LAST_DAY(DATEADD('month', n.offset, il.service_start_date))   AS recognition_month,
+    il.total_invoice_amount / il.service_months                   AS scheduled_amount
+  FROM invoice_lines il
+  -- offset = 0, 1, 2 … service_months-1 の連番を生成
+  CROSS JOIN (
+    SELECT ROW_NUMBER() OVER (ORDER BY NULL) - 1 AS offset
+    FROM TABLE(GENERATOR(ROWCOUNT => 120))        -- 最大10年分
+  ) n
+  WHERE n.offset < il.service_months
+)
+SELECT
+  invoice_line_id,
+  recognition_month,
+  invoice_id,
+  customer_id,
+  subscription_id,
+  scheduled_amount,
+  SUM(scheduled_amount) OVER (
+    PARTITION BY invoice_line_id
+    ORDER BY recognition_month
+    ROWS UNBOUNDED PRECEDING
+  )                                                               AS cumulative_recognized,
+  total_invoice_amount,
+  total_invoice_amount - SUM(scheduled_amount) OVER (
+    PARTITION BY invoice_line_id
+    ORDER BY recognition_month
+    ROWS UNBOUNDED PRECEDING
+  )                                                               AS deferred_balance,
+  'scheduled'                                                     AS recognition_status
+FROM monthly_schedule
+```
+
+### パターンB：ERP または Billing システムから取り込む
+
+Zuora Revenue・NetSuite Revenue Recognition・Salesforce Revenue Cloud 等、収益認識モジュールを持つシステムが正本の場合は、そちらから DWH へ取り込みます。
+
+| システム | 収益認識モジュール | 取得方法 |
+|---------|-----------------|---------|
+| Zuora Revenue | あり（Zuora Revenue） | Zuora Data Query / API |
+| NetSuite | あり（Revenue Recognition） | NetSuite SuiteAnalytics / API |
+| Salesforce | あり（Revenue Cloud / Salesforce Billing） | Salesforce Bulk API |
+| Stripe | なし | パターンAで DWH 計算 |
+| Chargebee | 限定的（月次のみ） | パターンA推奨 |
+
+### どちらを選ぶか
+
+| 状況 | 推奨パターン |
+|------|------------|
+| Stripe 等シンプルな Billing、ERP に収益認識モジュールなし | **A**（DWH で計算） |
+| Zuora Revenue・NetSuite 等が正本 | **B**（ERP/Billing から取込） |
+| GAAP/IFRS 準拠の監査対応が必要 | **B**（ERP の認識結果を正本とする） |
+
+パターンAとBを混在させると DWH と ERP の数字がずれます。いずれかに統一するか、パターンAを採用した上で ERP との照合クエリを定期実行する運用が必要です。
+
+---
+
 ## DWH に置く理由：横断分析のユースケース
 
 月次の仕訳生成や残高確認は Billing・ERP ツールが担います。DWH でこのテーブルを持つ意味は、他のドメインのデータと組み合わせて初めて答えられる問いのためです。
