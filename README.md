@@ -150,7 +150,7 @@
 
 ## ライセンス
 
-© 2026 Kazuhiro Kawachi. 本書の構成・編集・執筆方針は著者が担当しています。
+© 2026 Kazuhiro Kawachi. 本書の構成・編集・執筆方針は著者が担当しています。執筆支援に [Claude Code](https://claude.ai/code)（Anthropic）を使用しています。
 
 本書は [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja)（クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際）ライセンスのもとで公開しています。
 
