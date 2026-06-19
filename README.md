@@ -102,6 +102,7 @@
 - [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/05_dwh/07_fact_mrr.md)
 - [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/05_dwh/08_fact_cohort.md)
 - [NRR ファクトテーブル——収益の自己増殖力を測る](docs/05_dwh/09_fact_nrr.md)
+- [収益認識スケジュールファクトテーブル——いつ売上を計上するかを管理する](docs/05_dwh/10_fact_revenue_schedule.md)
 
 ---
 
@@ -118,6 +119,8 @@
 - [用語集（英日対応）](docs/07_appendix/02_glossary.md)
 - [主要SaaSプロダクト対応表](docs/07_appendix/03_saas_tools.md)
 - [職種別「売上」定義マップ](docs/07_appendix/04_revenue_by_role.md)
+- [KPIカバレッジマップ——算出できる指標・できない指標](docs/07_appendix/05_kpi_coverage.md)
+- [データ正本マトリックス——どのデータがどのシステムで管理されるか](docs/07_appendix/06_system_of_record.md)
 
 ---
 
