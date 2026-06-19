@@ -102,6 +102,7 @@
 - [MRR スナップショットファクトテーブル——SaaS の収益変動を月次で捉える](docs/05_dwh/07_fact_mrr.md)
 - [コホート分析ファクトテーブル——顧客の継続率を時系列で捉える](docs/05_dwh/08_fact_cohort.md)
 - [NRR ファクトテーブル——収益の自己増殖力を測る](docs/05_dwh/09_fact_nrr.md)
+- [収益認識スケジュールファクトテーブル——いつ売上を計上するかを管理する](docs/05_dwh/10_fact_revenue_schedule.md)
 
 ---
 
