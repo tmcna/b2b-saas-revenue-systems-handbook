@@ -89,7 +89,7 @@ Lead-to-Cash（最も広い）
 |---------|------------|-----|---------|
 | 商談・見積 | Opportunity, Quote | 交渉 | 可逆（破棄できます） |
 | 契約締結 | Contract | コミットメント | **ここから不可逆** |
-| 履行 | Order, Subscription | 履行 | 状態機械として進行します |
+| 履行 | Order, Subscription | 履行 | ステートマシンとして進行します |
 | 請求・入金 | Invoice, Payment | 決済 | Append-onlyです |
 
 契約締結（Contract）が「不可逆性の境界」です。ここを超えると、見積段階で「どうにでもなった」話が、法的義務になります。
