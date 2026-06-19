@@ -120,6 +120,7 @@
 - [主要SaaSプロダクト対応表](docs/07_appendix/03_saas_tools.md)
 - [職種別「売上」定義マップ](docs/07_appendix/04_revenue_by_role.md)
 - [KPIカバレッジマップ——算出できる指標・できない指標](docs/07_appendix/05_kpi_coverage.md)
+- [データ正本マトリックス——どのデータがどのシステムで管理されるか](docs/07_appendix/06_system_of_record.md)
 
 ---
 
