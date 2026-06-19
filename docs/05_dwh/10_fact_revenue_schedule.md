@@ -25,13 +25,13 @@
           繰延収益 0円（完全消化）
 ```
 
-この仕組みは会計基準（企業会計基準第29号・IFRS 15）が要求するものですが、業務上も重要です。**繰延収益残高は「まだ提供していないサービスの前受け分」**であり、将来の解約リスクと直結しています。
+この仕組みは会計基準（企業会計基準第29号・IFRS 15）が要求するものです。月次の仕訳生成や貸借対照表の繰延収益残高の管理は **Billing システムや ERP が担います**。DWHがこのデータを持つ意味は、他のドメインのデータと横断して分析するためです。
 
 ---
 
 ## なぜ専用のファクトテーブルが必要か
 
-`fact_invoice_line` は「請求書を発行した事実」を記録します。1月1日に年間120万円の請求書を発行すると、1月に1レコードが生まれます。このテーブルから「2月の売上」を計算することはできません。
+`fact_invoice_line` は「請求書を発行した事実」を記録します。1月1日に年間120万円の請求書を発行すると、1月に1レコードが生まれます。このテーブルから「2月の認識売上」を計算することはできません。
 
 収益認識スケジュールは、**1枚の請求書明細から複数の認識行を生成します**。年間12ヶ月の契約なら、1行の請求明細に対して12行の認識スケジュールが作られます。
 
@@ -109,46 +109,123 @@ fact_revenue_schedule (
 
 ---
 
-## 主要な集計クエリ
+## DWH に置く理由：横断分析のユースケース
 
-**月次認識売上（MRRとの比較用）**
+月次の仕訳生成や残高確認は Billing・ERP ツールが担います。DWH でこのテーブルを持つ意味は、他のドメインのデータと組み合わせて初めて答えられる問いのためです。
+
+---
+
+### ユースケース1：受注・請求・売上の三者照合
+
+[序章](../00_introduction/04_why_numbers_diverge.md)で示した「なぜ数字がずれるのか」への直接の答えがここにあります。
+
+```
+1月に年間120万円の契約を締結・請求した場合：
+
+  受注（Bookings）= 120万円  ← CRM / fact_quote_line
+  請求（Billings）= 120万円  ← Billing / fact_invoice_line
+  売上（Revenue）=  10万円  ← ERP→DWH / fact_revenue_schedule
+```
+
+3つの数字はそれぞれ異なるシステムに存在するため、DWH 上で結合しない限り一画面で比較できません。CFO がボードに報告する際の「なぜ受注と売上が違うのか」への説明責任が、この照合クエリで果たせます。
 
 ```sql
+-- 月次 受注 / 請求 / 売上 の三者照合
+WITH bookings AS (
+  SELECT
+    DATE_TRUNC('month', close_date_id)  AS month,
+    SUM(arr_amount / 12)                AS monthly_equivalent
+  FROM fact_quote_line
+  WHERE quote_status = 'accepted'
+    AND is_primary_quote = TRUE
+  GROUP BY 1
+),
+billings AS (
+  SELECT
+    DATE_TRUNC('month', invoice_date_id) AS month,
+    SUM(subtotal_amount)                 AS billed_amount
+  FROM fact_invoice_line
+  WHERE invoice_status != 'voided'
+    AND is_credit_note = FALSE
+  GROUP BY 1
+),
+revenue AS (
+  SELECT
+    DATE_TRUNC('month', recognition_month) AS month,
+    SUM(scheduled_amount)                  AS recognized_amount
+  FROM fact_revenue_schedule
+  WHERE recognition_status IN ('recognized', 'scheduled')
+  GROUP BY 1
+)
 SELECT
-  recognition_month,
-  SUM(scheduled_amount)                                  AS recognized_revenue,
-  COUNT(DISTINCT customer_id)                            AS recognizing_customers
-FROM fact_revenue_schedule
-WHERE recognition_status IN ('recognized', 'scheduled')
+  COALESCE(bk.month, bi.month, rv.month)   AS month,
+  COALESCE(bk.monthly_equivalent, 0)        AS bookings,
+  COALESCE(bi.billed_amount, 0)             AS billings,
+  COALESCE(rv.recognized_amount, 0)         AS revenue
+FROM bookings bk
+FULL OUTER JOIN billings bi USING (month)
+FULL OUTER JOIN revenue  rv USING (month)
+ORDER BY 1
+```
+
+---
+
+### ユースケース2：解約が収益認識に与えた影響の定量化
+
+`fact_mrr` はチャーン MRR（サブスクリプションの損失）を追跡しますが、年間前払い契約で早期解約が発生した場合、残余期間の繰延収益がどれだけ取り消されたかは MRR だけでは見えません。`fact_revenue_schedule` の `reversed` 行と `fact_mrr` のチャーン行を結合することで、解約の財務的影響を正確に測定できます。
+
+```sql
+-- 解約によるチャーンMRR と 繰延収益取り消し額の比較
+WITH churn AS (
+  SELECT
+    snapshot_month,
+    customer_id,
+    ABS(mrr_movement_amount) AS churn_mrr
+  FROM fact_mrr
+  WHERE mrr_movement_type = 'churn'
+),
+reversals AS (
+  SELECT
+    recognition_month,
+    customer_id,
+    SUM(ABS(scheduled_amount)) AS reversed_revenue
+  FROM fact_revenue_schedule
+  WHERE recognition_status = 'reversed'
+  GROUP BY 1, 2
+)
+SELECT
+  c.snapshot_month,
+  SUM(c.churn_mrr)         AS churn_mrr,
+  SUM(r.reversed_revenue)  AS reversed_deferred_revenue
+FROM churn c
+LEFT JOIN reversals r
+  ON  c.customer_id       = r.customer_id
+  AND c.snapshot_month    = r.recognition_month
 GROUP BY 1
 ORDER BY 1
 ```
 
-**月末時点の繰延収益残高**
+チャーン MRR（月次損失）と繰延収益取り消し額（一括損失）が異なる場合、早期解約・Pro-rata 返金の影響を可視化できます。
+
+---
+
+### ユースケース3：顧客セグメント別の認識売上分析
+
+ERP の売上勘定はセグメント情報を持たないことが多く、「エンタープライズ顧客の認識売上は SMB より安定しているか」という問いに ERP 単体では答えられません。`dim_customer` と結合することで、セグメント別・プラン別の認識売上を分析できます。
 
 ```sql
+-- 顧客セグメント別の月次認識売上
 SELECT
-  recognition_month,
-  SUM(deferred_balance)                                  AS deferred_revenue_balance,
-  COUNT(DISTINCT customer_id)                            AS customers_with_deferred
-FROM fact_revenue_schedule
-WHERE recognition_month = '2024-12-31'
-  AND recognition_status IN ('recognized', 'scheduled')
-GROUP BY 1
-```
-
-**繰延収益の推移（ウォーターフォール分析用）**
-
-```sql
-SELECT
-  recognition_month,
-  SUM(CASE WHEN recognition_status = 'recognized' THEN scheduled_amount  ELSE 0 END) AS recognized,
-  SUM(CASE WHEN recognition_status = 'reversed'   THEN scheduled_amount  ELSE 0 END) AS reversed,
-  SUM(deferred_balance)                                                                AS ending_balance
-FROM fact_revenue_schedule
-WHERE recognition_month BETWEEN '2024-01-31' AND '2024-12-31'
-GROUP BY 1
-ORDER BY 1
+  rs.recognition_month,
+  dc.customer_tier,
+  SUM(rs.scheduled_amount)   AS recognized_revenue,
+  COUNT(DISTINCT rs.customer_id) AS customer_count
+FROM fact_revenue_schedule rs
+JOIN dim_customer dc
+  ON rs.dim_customer_key = dc.customer_key
+WHERE rs.recognition_status IN ('recognized', 'scheduled')
+GROUP BY 1, 2
+ORDER BY 1, 2
 ```
 
 ---
@@ -168,34 +245,19 @@ ORDER BY 1
 ```
 1月1日に年間120万円の契約を締結した場合：
 
-  fact_invoice_line  → 1月：120万円、2月以降：0円（請求ベース）
-  fact_mrr           → 毎月：10万円（契約継続ベース）
-  fact_revenue_schedule → 毎月：10万円（収益認識ベース）
+  fact_invoice_line      → 1月：120万円、2月以降：0円（請求ベース）
+  fact_mrr               → 毎月：10万円（契約継続ベース）
+  fact_revenue_schedule  → 毎月：10万円（収益認識ベース）
 ```
 
-MRR と認識売上は通常一致しますが、Pro-rata 調整・返金・早期解約があると乖離します。
-
----
-
-## 総勘定元帳との連携
-
-収益認識スケジュールの月次処理は、ERPで仕訳を生成します。
-
-```
-毎月末に認識処理が実行されると：
-
-  借方：繰延収益（負債）   10万円
-  貸方：売上収益（収益）   10万円
-```
-
-この仕訳が`fact_revenue_schedule`の認識行に対応します。ERPの総勘定元帳（[第2章参照](../02_domains/10_general_ledger.md)）の残高と`deferred_balance`が一致していることが、月次クローズの確認ポイントになります。
+MRR と認識売上は通常一致しますが、Pro-rata 調整・返金・早期解約があると乖離します。この乖離がユースケース2で検出できます。
 
 ---
 
 ## よくある課題
 
 **即時解約時のスケジュール取り消し**
-解約が確定した時点で、将来の認識予定行を `reversed` に更新し、残余期間分の繰延収益を取り崩す仕訳が必要です。`deferred_balance` がマイナスにならないよう、ERPとの整合性を確認します。
+解約が確定した時点で、将来の認識予定行を `reversed` に更新する処理が必要です。この更新が遅れると `deferred_balance` が実態より膨らみ続け、ERP の繰延収益残高と乖離します。
 
 **Pro-rata 変更後のスケジュール再計算**
 期中のアップグレード・ダウングレードでは、差分の認識スケジュールが追加・修正されます。元の請求明細を修正するのか、差分の新明細を追加するのかで、スケジュールの構造が変わります。
